@@ -1,19 +1,19 @@
 class Cartas {
   final String suit;
   final String rank;
+  final String emoji;
 
   // Construtor da classe Cartas
-  Cartas({required this.suit, required this.rank});
+  Cartas({required this.suit, required this.rank, required this.emoji});
 
   // Sobrescrita do método toString para facilitar a exibição
   @override
   String toString() {
-    return '$rank of $suit';
+    return '$rank de $suit $emoji';
   }
 
   // Método estático para embaralhar uma lista de cartas
   static List<Cartas> embaralhar(List<Cartas> cartas) {
-    // Utilizando o método shuffle da classe List para embaralhar as cartas
     cartas.shuffle();
     return cartas;
   }

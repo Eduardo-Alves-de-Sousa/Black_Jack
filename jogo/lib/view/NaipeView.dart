@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:jogo/models/naipe.dart';
 
@@ -10,7 +11,7 @@ class NaipeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalhes do Naipe'),
+        title: const Text('Detalhes do Naipe'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -19,14 +20,14 @@ class NaipeWidget extends StatelessWidget {
           children: [
             Text(
               'Nome do Naipe: ${naipe.nome}',
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 // Alguma lógica aqui, se necessário
               },
-              child: Text('Ação do Botão'),
+              child: const Text('Ação do Botão'),
             ),
           ],
         ),

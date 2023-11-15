@@ -4,7 +4,7 @@ import 'package:jogo/models/cartas.dart';
 class CartaWidget extends StatelessWidget {
   final Cartas carta;
 
-  const CartaWidget({super.key, required this.carta});
+  const CartaWidget({Key? key, required this.carta}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class CartaWidget extends StatelessWidget {
               style: TextStyle(fontSize: 20),
             ),
             Text(
-              carta.suit,
+              carta.emoji, // Mostra o emoji do naipe
               style: TextStyle(fontSize: 20),
             ),
           ],

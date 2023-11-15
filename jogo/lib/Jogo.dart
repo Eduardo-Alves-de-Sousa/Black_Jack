@@ -6,7 +6,7 @@ import 'package:jogo/models/baralho.dart';
 import 'package:jogo/models/cartas.dart';
 
 class JogoBlackjack extends StatefulWidget {
-  const JogoBlackjack({super.key});
+  const JogoBlackjack({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -15,8 +15,8 @@ class JogoBlackjack extends StatefulWidget {
 
 class _JogoBlackjackState extends State<JogoBlackjack> {
   late Baralho baralho;
-  late Jogador jogador;
-  late Jogador dealer;
+  late Jogador jogador1;
+  late Jogador jogador2;
 
   @override
   void initState() {
@@ -28,48 +28,41 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
     baralho = Baralho();
     baralho.embaralhar();
 
-    jogador = Jogador(nome: 'Jogador', mao: [], carteira: 1000, aposta: 0);
-    dealer = Jogador(nome: 'Dealer', mao: [], carteira: 0, aposta: 0);
+    jogador1 = Jogador(nome: 'Jogador 1', mao: [], carteira: 1000, aposta: 0);
+    jogador2 = Jogador(nome: 'Jogador 2', mao: [], carteira: 1000, aposta: 0);
 
     // Distribuir cartas iniciais
-    jogador.receberCarta(baralho.pegarCarta());
-    dealer.receberCarta(baralho.pegarCarta());
-    jogador.receberCarta(baralho.pegarCarta());
-    dealer.receberCarta(baralho.pegarCarta());
+    jogador1.receberCarta(baralho.pegarCarta());
+    jogador2.receberCarta(baralho.pegarCarta());
+    jogador1.receberCarta(baralho.pegarCarta());
+    jogador2.receberCarta(baralho.pegarCarta());
   }
 
   @override
   Widget build(BuildContext context) {
+    const double cardWidth = 80;
+    const double cardHeight = 120;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Blackjack - Jogo'),
       ),
+      backgroundColor: const Color(0xFF2E7D32),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('Pontuação do Jogador: ${jogador.obterPontuacao()}'),
+            Text('Pontuação do Jogador 1: ${jogador1.obterPontuacao()}'),
             const SizedBox(height: 16),
-            const Text('Cartas do Jogador:'),
+            const Text('Cartas do Jogador 1:'),
             SizedBox(
-              height: 80,
+              height: cardHeight,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: jogador.mao.length,
+                itemCount: jogador1.mao.length,
                 itemBuilder: (context, index) {
-                  return CartaWidget(jogador.mao[index]);
-                },
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text('Carta do Dealer: ${dealer.mao.isEmpty ? "" : dealer.mao[0]}'),
-            SizedBox(
-              height: 80,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: dealer.mao.isEmpty ? 0 : 1,
-                itemBuilder: (context, index) {
-                  return CartaWidget(dealer.mao[index]);
+                  return CartaWidget(jogador1.mao[index],
+                      width: cardWidth, height: cardHeight);
                 },
               ),
             ),
@@ -77,11 +70,36 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  jogadorReceberCarta();
+                  jogadorReceberCarta(jogador1);
                 });
               },
-              child: const Text('Receber Carta'),
+              child: const Text('Jogador 1 - Receber Carta'),
             ),
+            const SizedBox(height: 32),
+            Text('Pontuação do Jogador 2: ${jogador2.obterPontuacao()}'),
+            const SizedBox(height: 16),
+            const Text('Cartas do Jogador 2:'),
+            SizedBox(
+              height: cardHeight,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: jogador2.mao.length,
+                itemBuilder: (context, index) {
+                  return CartaWidget(jogador2.mao[index],
+                      width: cardWidth, height: cardHeight);
+                },
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  jogadorReceberCarta(jogador2);
+                });
+              },
+              child: const Text('Jogador 2 - Receber Carta'),
+            ),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 setState(() {
@@ -90,7 +108,8 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
               },
               child: const Text('Encerrar Rodada'),
             ),
-            if (jogador.obterPontuacao() == 21)
+            if (jogador1.obterPontuacao() == 21 ||
+                jogador2.obterPontuacao() == 21)
               ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -99,7 +118,8 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
                 },
                 child: const Text('Jogador Vence (21 pontos)'),
               ),
-            if (jogador.obterPontuacao() < 21)
+            if (jogador1.obterPontuacao() < 21 ||
+                jogador2.obterPontuacao() < 21)
               ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -114,61 +134,70 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
     );
   }
 
-  void jogadorReceberCarta() {
+  void jogadorReceberCarta(Jogador jogador) {
     jogador.receberCarta(baralho.pegarCarta());
 
     // Verificar se o jogador ultrapassou 21 pontos
     if (jogador.obterPontuacao() > 21) {
-      // Implementar lógica para jogador perder
       // ignore: avoid_print
-      print('Jogador perdeu!');
+      print('${jogador.nome} perdeu!');
       iniciarJogo();
     }
   }
 
   void pararDeReceberCartas() {
-    // Lógica para o dealer jogar
-    while (dealer.obterPontuacao() < 17) {
-      dealer.receberCarta(baralho.pegarCarta());
+    // Lógica para os jogadores jogarem
+    while (jogador1.obterPontuacao() < 17 || jogador2.obterPontuacao() < 17) {
+      if (jogador1.obterPontuacao() < 17) {
+        jogadorReceberCarta(jogador1);
+      }
+      if (jogador2.obterPontuacao() < 17) {
+        jogadorReceberCarta(jogador2);
+      }
     }
 
     // Verificar o vencedor
-    int pontuacaoJogador = jogador.obterPontuacao();
-    int pontuacaoDealer = dealer.obterPontuacao();
+    int pontuacaoJogador1 = jogador1.obterPontuacao();
+    int pontuacaoJogador2 = jogador2.obterPontuacao();
 
-    if (pontuacaoJogador > 21 ||
-        (pontuacaoDealer <= 21 && pontuacaoDealer >= pontuacaoJogador)) {
-      // Dealer vence
+    if ((pontuacaoJogador1 > 21 && pontuacaoJogador2 > 21) ||
+        (pontuacaoJogador1 <= 21 &&
+            pontuacaoJogador2 <= 21 &&
+            pontuacaoJogador2 >= pontuacaoJogador1)) {
       // ignore: avoid_print
-      print('Dealer vence!');
+      print('Jogador 2 vence!');
     } else {
-      // Jogador vence
       // ignore: avoid_print
-      print('Jogador vence!');
+      print('Jogador 1 vence!');
     }
 
     iniciarJogo();
   }
 
   void encerrarRodada() {
-    // Lógica para o dealer jogar
-    while (dealer.obterPontuacao() < 17) {
-      dealer.receberCarta(baralho.pegarCarta());
+    // Lógica para os jogadores jogarem
+    while (jogador1.obterPontuacao() < 17 || jogador2.obterPontuacao() < 17) {
+      if (jogador1.obterPontuacao() < 17) {
+        jogadorReceberCarta(jogador1);
+      }
+      if (jogador2.obterPontuacao() < 17) {
+        jogadorReceberCarta(jogador2);
+      }
     }
 
     // Verificar o vencedor
-    int pontuacaoJogador = jogador.obterPontuacao();
-    int pontuacaoDealer = dealer.obterPontuacao();
+    int pontuacaoJogador1 = jogador1.obterPontuacao();
+    int pontuacaoJogador2 = jogador2.obterPontuacao();
 
-    if (pontuacaoJogador > 21 ||
-        (pontuacaoDealer <= 21 && pontuacaoDealer >= pontuacaoJogador)) {
-      // Dealer vence
+    if ((pontuacaoJogador1 > 21 && pontuacaoJogador2 > 21) ||
+        (pontuacaoJogador1 <= 21 &&
+            pontuacaoJogador2 <= 21 &&
+            pontuacaoJogador2 >= pontuacaoJogador1)) {
       // ignore: avoid_print
-      print('Dealer vence!');
+      print('Jogador 2 vence!');
     } else {
-      // Jogador vence
       // ignore: avoid_print
-      print('Jogador vence!');
+      print('Jogador 1 vence!');
     }
 
     iniciarJogo();
@@ -177,21 +206,25 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
 
 class CartaWidget extends StatelessWidget {
   final Cartas carta;
+  final double width;
+  final double height;
 
-  const CartaWidget(this.carta, {super.key});
+  const CartaWidget(this.carta,
+      {Key? key, required this.width, required this.height})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 60,
-      height: 80,
+      width: width,
+      height: height,
       margin: const EdgeInsets.all(4),
-      color: Color.fromARGB(255, 173, 173, 173),
+      color: const Color.fromARGB(255, 252, 252, 252),
       child: Center(
         child: Text(
           '${carta.rank} ${carta.emoji}',
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 20),
+          style: const TextStyle(fontSize: 24),
         ),
       ),
     );

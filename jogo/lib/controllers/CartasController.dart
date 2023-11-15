@@ -1,47 +1,23 @@
-import 'package:jogo/models/cartas.dart';
+class Cartas {
+  final String suit;
+  final String rank;
+  final String emoji;
 
-class CartasController {
-  // Método para criar uma lista de cartas com um naipe específico
-  static List<Cartas> criarBaralhoComNaipe(String naipe) {
-    List<String> ranks = [
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '10',
-      'Valete',
-      'Dama',
-      'Rei',
-      'Ás'
-    ];
+  // Construtor da classe Cartas
+  Cartas({
+    required this.suit,
+    required this.rank,
+    required this.emoji,
+  });
 
-    List<Cartas> baralho = [];
-
-    for (String rank in ranks) {
-      baralho.add(Cartas(suit: naipe, rank: rank));
-    }
-
-    return baralho;
+  // Sobrescrita do método toString para facilitar a exibição
+  @override
+  String toString() {
+    return '$rank de $suit $emoji';
   }
 
-  // Método para criar um baralho completo
-  static List<Cartas> criarBaralhoCompleto() {
-    List<String> naipes = ['Copas', 'Ouros', 'Paus', 'Espadas'];
-    List<Cartas> baralhoCompleto = [];
-
-    for (String naipe in naipes) {
-      baralhoCompleto.addAll(criarBaralhoComNaipe(naipe));
-    }
-
-    return baralhoCompleto;
-  }
-
-  // Método para embaralhar um baralho
-  static List<Cartas> embaralharBaralho(List<Cartas> cartas) {
+  // Método estático para embaralhar uma lista de cartas
+  static List<Cartas> embaralhar(List<Cartas> cartas) {
     cartas.shuffle();
     return cartas;
   }

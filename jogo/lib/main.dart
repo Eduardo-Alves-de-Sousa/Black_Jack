@@ -6,7 +6,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +29,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Blackjack'),
       ),
+      backgroundColor: const Color(0xFF2E7D32), // Define a cor de fundo
       body: Center(
         child: ElevatedButton(
           onPressed: () {

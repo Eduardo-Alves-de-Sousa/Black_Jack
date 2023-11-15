@@ -1,15 +1,15 @@
-import 'package:jogo/models/naipe.dart';
+class Naipe {
+  final String nome;
+  final String emoji;
 
-class NaipeController {
-  // Método para criar uma instância de Naipe
-  static Naipe criarNaipe(String nome) {
-    return Naipe(nome);
+  // Construtor da classe Naipe
+  const Naipe({
+    required this.nome,
+    required this.emoji,
+  });
+
+  @override
+  String toString() {
+    return nome;
   }
-
-  // Exemplo de método para verificar se dois naipes são iguais
-  static bool saoIguais(Naipe naipe1, Naipe naipe2) {
-    return naipe1.nome == naipe2.nome;
-  }
-
-  // Outras operações relacionadas ao Naipe podem ser adicionadas conforme necessário
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jogo/historico_screen.dart';
 import 'carta_widget.dart';
 import 'package:jogo/models/jogador.dart';
 import 'package:jogo/models/baralho.dart';
@@ -244,6 +245,11 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Fechar o diálogo
+
+                // Adicionar informações ao histórico
+                adicionarAoHistorico(jogador1);
+                adicionarAoHistorico(jogador2);
+
                 iniciarJogo(); // Iniciar um novo jogo
                 setState(() {}); // Atualizar a interface
               },
@@ -252,14 +258,54 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Fechar o diálogo
-                Navigator.of(context).popUntil(
-                    (route) => route.isFirst); // Voltar para a tela principal
+
+                // Adicionar informações ao histórico
+                adicionarAoHistorico(jogador1);
+                adicionarAoHistorico(jogador2);
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HistoricoScreen(),
+                  ),
+                );
               },
               child: const Text('Não'),
             ),
           ],
         );
       },
+    );
+  }
+
+  void adicionarAoHistorico(Jogador jogador) {
+    String resultado = 'Derrota';
+
+    // Verificar se o jogador venceu
+    if (jogador.obterPontuacao() <= 21 &&
+        (jogador == jogador1 ||
+            (jogador == jogador2 && jogador1.obterPontuacao() > 21))) {
+      resultado = 'Vitória';
+    } else if (jogador.obterPontuacao() <= 21 &&
+        jogador1.obterPontuacao() > 21 &&
+        jogador == jogador2) {
+      resultado = 'Vitória';
+    } else if (jogador.obterPontuacao() <= 21 &&
+        jogador1.obterPontuacao() <= 21 &&
+        jogador2.obterPontuacao() <= 21 &&
+        jogador.obterPontuacao() > jogador1.obterPontuacao() &&
+        jogador.obterPontuacao() > jogador2.obterPontuacao()) {
+      resultado = 'Vitória';
+    } else if (jogador.obterPontuacao() == jogador1.obterPontuacao() &&
+        jogador.obterPontuacao() == jogador2.obterPontuacao()) {
+      resultado = 'Empate';
+    }
+
+    Historico.adicionarJogo(
+      nomeJogador: jogador.nome,
+      pontuacao: jogador.obterPontuacao(),
+      resultado: resultado,
+      empate: resultado == 'Empate',
     );
   }
 }

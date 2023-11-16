@@ -5,16 +5,18 @@ class HistoricoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Substitua este exemplo com a lógica real para exibir o histórico
-    List<HistoricoItem> historico = [
-      HistoricoItem(nomeJogador: 'Jogador1', resultado: 'Venceu'),
-      HistoricoItem(nomeJogador: 'Jogador2', resultado: 'Perdeu'),
-      HistoricoItem(nomeJogador: 'Jogador3', resultado: 'Empatou'),
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Histórico'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              // Chamar a função para apagar o histórico
+              Historico.limparHistorico();
+            },
+            icon: const Icon(Icons.delete),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -26,12 +28,18 @@ class HistoricoScreen extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            Column(
-              children: historico
-                  .map((item) => ListTile(
-                        title: Text('${item.nomeJogador} - ${item.resultado}'),
-                      ))
-                  .toList(),
+            // Exibir o histórico global
+            Expanded(
+              child: ListView.builder(
+                itemCount: Historico.historico.length,
+                itemBuilder: (context, index) {
+                  final jogo = Historico.historico[index];
+                  return ListTile(
+                    title: Text(
+                        '${jogo.nomeJogador} - Pontuação: ${jogo.pontuacao} - ${jogo.resultado}'),
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -41,15 +49,44 @@ class HistoricoScreen extends StatelessWidget {
 }
 
 class HistoricoItem {
+  final String id; // Identificador único para cada jogo
   final String nomeJogador;
+  final int pontuacao;
   final String resultado;
-
-  // Adicionando um campo para indicar se a partida terminou em empate
   final bool empate;
 
   HistoricoItem({
+    required this.id,
     required this.nomeJogador,
+    required this.pontuacao,
     required this.resultado,
-    this.empate = false,
+    required this.empate,
   });
+}
+
+class Historico {
+  static List<HistoricoItem> historico = [];
+
+  static void adicionarJogo({
+    required String nomeJogador,
+    required int pontuacao,
+    required String resultado,
+    required bool empate,
+  }) {
+    final id = DateTime.now().millisecondsSinceEpoch.toString();
+    historico.add(
+      HistoricoItem(
+        id: id,
+        nomeJogador: nomeJogador,
+        pontuacao: pontuacao,
+        resultado: resultado,
+        empate: empate,
+      ),
+    );
+  }
+
+  // Função para limpar o histórico
+  static void limparHistorico() {
+    historico.clear();
+  }
 }

@@ -11,7 +11,6 @@ class JogoBlackjack extends StatefulWidget {
       : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _JogoBlackjackState createState() => _JogoBlackjackState();
 }
 
@@ -118,7 +117,7 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    encerrarRodada();
+                    mostrarResultadoDialog();
                   });
                 },
                 child: const Text('Jogador Vence (21 pontos)'),
@@ -126,7 +125,6 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
             if (jogador1.obterPontuacao() < 21 ||
                 jogador2.obterPontuacao() < 21)
               ElevatedButton(
-                // style: ElevatedButton.styleFrom(textStyle: ),
                 onPressed: () {
                   setState(() {
                     pararDeReceberCartas();
@@ -147,7 +145,7 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
     if (jogador.obterPontuacao() > 21) {
       // ignore: avoid_print
       print('${jogador.nome} perdeu!');
-      iniciarJogo();
+      mostrarResultadoDialog();
     }
   }
 
@@ -166,10 +164,21 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
     int pontuacaoJogador1 = jogador1.obterPontuacao();
     int pontuacaoJogador2 = jogador2.obterPontuacao();
 
-    if ((pontuacaoJogador1 > 21 && pontuacaoJogador2 > 21) ||
-        (pontuacaoJogador1 <= 21 &&
-            pontuacaoJogador2 <= 21 &&
-            pontuacaoJogador2 >= pontuacaoJogador1)) {
+    if (pontuacaoJogador1 > 21 && pontuacaoJogador2 > 21) {
+      // ignore: avoid_print
+      print('Empate!');
+    } else if (pontuacaoJogador1 <= 21 && pontuacaoJogador2 <= 21) {
+      if (pontuacaoJogador1 == pontuacaoJogador2) {
+        // ignore: avoid_print
+        print('Empate!');
+      } else if (pontuacaoJogador2 > pontuacaoJogador1) {
+        // ignore: avoid_print
+        print('${jogador2.nome} vence!');
+      } else {
+        // ignore: avoid_print
+        print('${jogador1.nome} vence!');
+      }
+    } else if (pontuacaoJogador1 > 21) {
       // ignore: avoid_print
       print('${jogador2.nome} vence!');
     } else {
@@ -177,7 +186,7 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
       print('${jogador1.nome} vence!');
     }
 
-    iniciarJogo();
+    mostrarResultadoDialog();
   }
 
   void encerrarRodada() {
@@ -195,10 +204,21 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
     int pontuacaoJogador1 = jogador1.obterPontuacao();
     int pontuacaoJogador2 = jogador2.obterPontuacao();
 
-    if ((pontuacaoJogador1 > 21 && pontuacaoJogador2 > 21) ||
-        (pontuacaoJogador1 <= 21 &&
-            pontuacaoJogador2 <= 21 &&
-            pontuacaoJogador2 >= pontuacaoJogador1)) {
+    if (pontuacaoJogador1 > 21 && pontuacaoJogador2 > 21) {
+      // ignore: avoid_print
+      print('Empate!');
+    } else if (pontuacaoJogador1 <= 21 && pontuacaoJogador2 <= 21) {
+      if (pontuacaoJogador1 == pontuacaoJogador2) {
+        // ignore: avoid_print
+        print('Empate!');
+      } else if (pontuacaoJogador2 > pontuacaoJogador1) {
+        // ignore: avoid_print
+        print('${jogador2.nome} vence!');
+      } else {
+        // ignore: avoid_print
+        print('${jogador1.nome} vence!');
+      }
+    } else if (pontuacaoJogador1 > 21) {
       // ignore: avoid_print
       print('${jogador2.nome} vence!');
     } else {
@@ -206,6 +226,40 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
       print('${jogador1.nome} vence!');
     }
 
-    iniciarJogo();
+    mostrarResultadoDialog();
+  }
+
+  void mostrarResultadoDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Resultado da Partida'),
+          content: Text(
+            'Pontuação ${jogador1.nome}: ${jogador1.obterPontuacao()}\n'
+            'Pontuação ${jogador2.nome}: ${jogador2.obterPontuacao()}\n\n'
+            'Deseja continuar jogando?',
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Fechar o diálogo
+                iniciarJogo(); // Iniciar um novo jogo
+                setState(() {}); // Atualizar a interface
+              },
+              child: const Text('Sim'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Fechar o diálogo
+                Navigator.of(context).popUntil(
+                    (route) => route.isFirst); // Voltar para a tela principal
+              },
+              child: const Text('Não'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

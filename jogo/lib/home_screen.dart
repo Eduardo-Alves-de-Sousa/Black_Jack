@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'jogo_blackjack.dart';
+import 'historico_screen.dart'; // Importe a tela de histórico
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -108,6 +109,32 @@ class HomeScreen extends StatelessWidget {
                 }
               },
               child: const Text('Jogar'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                ),
+                shape: MaterialStateProperty.all<OutlinedBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                textStyle: MaterialStateProperty.all<TextStyle>(
+                  const TextStyle(fontSize: 20),
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        const HistoricoScreen(), // Navegar para a tela de histórico
+                  ),
+                );
+              },
+              child: const Text('Ver Histórico'),
             ),
           ],
         ),

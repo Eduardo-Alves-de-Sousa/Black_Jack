@@ -1,6 +1,10 @@
 import 'package:jogo/models/baralho.dart';
 import 'package:jogo/models/jogador.dart';
 
+/*Observer é um padrão de projeto comportamental que permite 
+que você defina um mecanismo de assinatura para notificar múltiplos 
+objetos sobre quaisquer eventos que aconteçam com o objeto que eles estão
+ observando. */
 class PartidaException implements Exception {
   final String mensagem;
 

@@ -20,10 +20,12 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            const Image(image: AssetImage('lib/image/inicial.png')),
             const Text(
               'Informe os nomes dos jogadores:',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
+            // Image.asset(),
             const SizedBox(height: 16),
             Form(
               child: Column(
@@ -36,7 +38,7 @@ class HomeScreen extends StatelessWidget {
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide.none,
@@ -56,7 +58,7 @@ class HomeScreen extends StatelessWidget {
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide.none,
@@ -98,14 +100,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   );
                 } else {
-                  // Exibir um snackbar ou alerta informando que ambos os nomes devem ser preenchidos.
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Por favor, insira os nomes dos jogadores.',
-                      ),
-                    ),
-                  );
+                  _showAlertDialog(context);
                 }
               },
               child: const Text('Jogar'),
@@ -134,11 +129,47 @@ class HomeScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Ver Histórico'),
+              child: const Text('Histórico'),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  void _showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text('Aviso'),
+          content: const Text('Por favor, insira os nomes dos jogadores.'),
+          actions: <Widget>[
+            ElevatedButton(
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                ),
+                shape: MaterialStateProperty.all<OutlinedBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                textStyle: MaterialStateProperty.all<TextStyle>(
+                  const TextStyle(fontSize: 13.5),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

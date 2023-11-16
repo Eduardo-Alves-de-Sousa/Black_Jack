@@ -1,12 +1,14 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
+import 'carta_widget.dart';
 import 'package:jogo/models/jogador.dart';
 import 'package:jogo/models/baralho.dart';
-import 'package:jogo/models/cartas.dart';
 
 class JogoBlackjack extends StatefulWidget {
-  const JogoBlackjack({Key? key}) : super(key: key);
+  final String nomeJogador1;
+  final String nomeJogador2;
+
+  const JogoBlackjack(this.nomeJogador1, this.nomeJogador2, {Key? key})
+      : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -28,8 +30,10 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
     baralho = Baralho();
     baralho.embaralhar();
 
-    jogador1 = Jogador(nome: 'Jogador 1', mao: [], carteira: 1000, aposta: 0);
-    jogador2 = Jogador(nome: 'Jogador 2', mao: [], carteira: 1000, aposta: 0);
+    jogador1 =
+        Jogador(nome: widget.nomeJogador1, mao: [], carteira: 1000, aposta: 0);
+    jogador2 =
+        Jogador(nome: widget.nomeJogador2, mao: [], carteira: 1000, aposta: 0);
 
     // Distribuir cartas iniciais
     jogador1.receberCarta(baralho.pegarCarta());
@@ -52,7 +56,7 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('Pontuação do Jogador 1: ${jogador1.obterPontuacao()}'),
+            Text('Pontuação do ${jogador1.nome}: ${jogador1.obterPontuacao()}'),
             const SizedBox(height: 16),
             const Text('Cartas do Jogador 1:'),
             SizedBox(
@@ -76,7 +80,7 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
               child: const Text('Jogador 1 - Receber Carta'),
             ),
             const SizedBox(height: 32),
-            Text('Pontuação do Jogador 2: ${jogador2.obterPontuacao()}'),
+            Text('Pontuação do ${jogador2.nome}: ${jogador2.obterPontuacao()}'),
             const SizedBox(height: 16),
             const Text('Cartas do Jogador 2:'),
             SizedBox(
@@ -108,6 +112,7 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
               },
               child: const Text('Encerrar Rodada'),
             ),
+            const SizedBox(height: 20),
             if (jogador1.obterPontuacao() == 21 ||
                 jogador2.obterPontuacao() == 21)
               ElevatedButton(
@@ -121,6 +126,7 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
             if (jogador1.obterPontuacao() < 21 ||
                 jogador2.obterPontuacao() < 21)
               ElevatedButton(
+                // style: ElevatedButton.styleFrom(textStyle: ),
                 onPressed: () {
                   setState(() {
                     pararDeReceberCartas();
@@ -165,10 +171,10 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
             pontuacaoJogador2 <= 21 &&
             pontuacaoJogador2 >= pontuacaoJogador1)) {
       // ignore: avoid_print
-      print('Jogador 2 vence!');
+      print('${jogador2.nome} vence!');
     } else {
       // ignore: avoid_print
-      print('Jogador 1 vence!');
+      print('${jogador1.nome} vence!');
     }
 
     iniciarJogo();
@@ -194,39 +200,12 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
             pontuacaoJogador2 <= 21 &&
             pontuacaoJogador2 >= pontuacaoJogador1)) {
       // ignore: avoid_print
-      print('Jogador 2 vence!');
+      print('${jogador2.nome} vence!');
     } else {
       // ignore: avoid_print
-      print('Jogador 1 vence!');
+      print('${jogador1.nome} vence!');
     }
 
     iniciarJogo();
-  }
-}
-
-class CartaWidget extends StatelessWidget {
-  final Cartas carta;
-  final double width;
-  final double height;
-
-  const CartaWidget(this.carta,
-      {Key? key, required this.width, required this.height})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      margin: const EdgeInsets.all(4),
-      color: const Color.fromARGB(255, 252, 252, 252),
-      child: Center(
-        child: Text(
-          '${carta.rank} ${carta.emoji}',
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 24),
-        ),
-      ),
-    );
   }
 }

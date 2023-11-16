@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jogo/models/partida.dart';
-import 'package:jogo/view/JogadorView.dart';
+import 'package:jogo/view/jogador_view.dart';
 
 class PartidaWidget extends StatelessWidget {
   final Partida partida;
@@ -11,7 +11,7 @@ class PartidaWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Partida de Blackjack'),
+        title: const Text('Partida de Blackjack'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -19,32 +19,32 @@ class PartidaWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             JogadorWidget(jogador: partida.jogador),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             JogadorWidget(jogador: partida.dealer),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 // Lógica para o jogador receber uma carta
                 partida.jogadorReceberCarta();
               },
-              child: Text('Receber Carta'),
+              child: const Text('Receber Carta'),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             ElevatedButton(
               onPressed: () {
                 // Lógica para encerrar a rodada
                 partida.dealerJogar();
                 partida.encerrarRodada();
               },
-              child: Text('Encerrar Rodada'),
+              child: const Text('Encerrar Rodada'),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             ElevatedButton(
               onPressed: () {
                 // Lógica para iniciar uma nova rodada
                 partida.iniciarRodada();
               },
-              child: Text('Nova Rodada'),
+              child: const Text('Nova Rodada'),
             ),
           ],
         ),

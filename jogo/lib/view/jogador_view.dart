@@ -17,22 +17,22 @@ class JogadorWidget extends StatelessWidget {
           children: <Widget>[
             Text(
               'Nome: ${jogador.nome}',
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
             Text(
               'Carteira: ${jogador.carteira}',
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
             Text(
               'Aposta: ${jogador.aposta}',
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
             Text(
               'Pontuação: ${jogador.obterPontuacao()}',
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
-            SizedBox(height: 10),
-            Text(
+            const SizedBox(height: 10),
+            const Text(
               'Mão:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
@@ -50,7 +50,7 @@ class JogadorWidget extends StatelessWidget {
   Widget _buildCartaWidget(Cartas carta) {
     return Text(
       carta.toString(),
-      style: TextStyle(fontSize: 16),
+      style: const TextStyle(fontSize: 16),
     );
   }
 }

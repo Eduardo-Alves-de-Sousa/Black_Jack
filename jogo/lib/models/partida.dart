@@ -1,6 +1,15 @@
 import 'baralho.dart';
 import 'jogador.dart';
 
+class PartidaException implements Exception {
+  final String mensagem;
+
+  PartidaException(this.mensagem);
+
+  @override
+  String toString() => 'PartidaException: $mensagem';
+}
+
 class Partida {
   Jogador dealer;
   Jogador jogador;
@@ -15,6 +24,12 @@ class Partida {
 
   // Método para iniciar uma nova rodada
   void iniciarRodada() {
+    // Verifica se há cartas suficientes no baralho
+    if (baralho.cartas.length < 4) {
+      throw PartidaException(
+          'Não há cartas suficientes para iniciar uma nova rodada.');
+    }
+
     // Limpa as mãos dos jogadores
     jogador.limparMao();
     dealer.limparMao();

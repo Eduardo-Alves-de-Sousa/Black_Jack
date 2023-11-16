@@ -1,3 +1,5 @@
+import 'package:jogo/exceptions/jogador_exception.dart';
+
 import 'cartas.dart';
 
 class Jogador {
@@ -26,16 +28,19 @@ class Jogador {
 
   // Método para ajustar a aposta do jogador
   void ajustarAposta(int novaAposta) {
-    if (novaAposta >= 0 && novaAposta <= carteira) {
-      aposta = novaAposta;
+    if (novaAposta < 0 || novaAposta > carteira) {
+      throw JogadorException(
+          'Aposta inválida. Aposta deve ser entre 0 e $carteira.');
     }
+    aposta = novaAposta;
   }
 
   // Método para ajustar a quantidade de dinheiro na carteira do jogador
   void ajustarCarteira(int novoValor) {
-    if (novoValor >= 0) {
-      carteira = novoValor;
+    if (novoValor < 0) {
+      throw JogadorException('Valor da carteira não pode ser negativo.');
     }
+    carteira = novoValor;
   }
 
   // Método para obter a pontuação da mão do jogador

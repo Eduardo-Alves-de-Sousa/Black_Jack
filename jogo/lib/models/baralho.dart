@@ -1,5 +1,7 @@
-import 'package:jogo/models/cartas.dart';
-import 'package:jogo/models/naipe.dart';
+import 'package:jogo/exceptions/baralho_exception.dart';
+
+import 'cartas.dart';
+import 'naipe.dart';
 
 class Baralho {
   final List<Cartas> cartas;
@@ -50,7 +52,7 @@ class Baralho {
 
   Cartas pegarCarta() {
     if (cartas.isEmpty) {
-      throw Exception('Baralho vazio');
+      throw BaralhoVazioException('O baralho está vazio');
     }
     return cartas.removeAt(0);
   }

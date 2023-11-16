@@ -113,7 +113,7 @@ class Historico {
   // Adicionando um método estático para notificar os ouvintes (observadores)
   static void notifyListeners() {
     // Usar setState para notificar os ouvintes
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       for (var listener in listeners) {
         listener();
       }

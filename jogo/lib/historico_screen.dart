@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'home_screen.dart';
 
 class HistoricoScreen extends StatelessWidget {
   const HistoricoScreen({Key? key}) : super(key: key);
@@ -13,6 +14,11 @@ class HistoricoScreen extends StatelessWidget {
             onPressed: () {
               // Chamar a função para apagar o histórico
               Historico.limparHistorico();
+              // Atualizar a UI usando setState
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
+              );
             },
             icon: const Icon(Icons.delete),
           ),
@@ -36,7 +42,8 @@ class HistoricoScreen extends StatelessWidget {
                   final jogo = Historico.historico[index];
                   return ListTile(
                     title: Text(
-                        '${jogo.nomeJogador} - Pontuação: ${jogo.pontuacao} - ${jogo.resultado}'),
+                      '${jogo.nomeJogador} - Pontuação: ${jogo.pontuacao} - ${jogo.resultado}',
+                    ),
                   );
                 },
               ),
@@ -44,12 +51,22 @@ class HistoricoScreen extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navegar para a tela inicial
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        },
+        child: const Icon(Icons.home),
+      ),
     );
   }
 }
 
 class HistoricoItem {
-  final String id; // Identificador único para cada jogo
+  final String id;
   final String nomeJogador;
   final int pontuacao;
   final String resultado;
@@ -74,19 +91,35 @@ class Historico {
     required bool empate,
   }) {
     final id = DateTime.now().millisecondsSinceEpoch.toString();
-    historico.add(
-      HistoricoItem(
-        id: id,
-        nomeJogador: nomeJogador,
-        pontuacao: pontuacao,
-        resultado: resultado,
-        empate: empate,
-      ),
+    final novoJogo = HistoricoItem(
+      id: id,
+      nomeJogador: nomeJogador,
+      pontuacao: pontuacao,
+      resultado: resultado,
+      empate: empate,
     );
+    historico.add(novoJogo);
+    // Atualizar a UI usando setState
+    notifyListeners();
   }
 
   // Função para limpar o histórico
   static void limparHistorico() {
     historico.clear();
+    // Atualizar a UI usando setState
+    notifyListeners();
   }
+
+  // Adicionando um método estático para notificar os ouvintes (observadores)
+  static void notifyListeners() {
+    // Usar setState para notificar os ouvintes
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      for (var listener in listeners) {
+        listener();
+      }
+    });
+  }
+
+  // Lista de ouvintes (observadores)
+  static List<VoidCallback> listeners = [];
 }

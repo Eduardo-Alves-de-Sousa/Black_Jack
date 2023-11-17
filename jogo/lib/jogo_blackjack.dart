@@ -12,6 +12,7 @@ class JogoBlackjack extends StatefulWidget {
       : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _JogoBlackjackState createState() => _JogoBlackjackState();
 }
 
@@ -50,15 +51,22 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Blackjack - Jogo'),
+        backgroundColor: Colors.green,
       ),
       backgroundColor: const Color(0xFF2E7D32),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('Pontuação do ${jogador1.nome}: ${jogador1.obterPontuacao()}'),
+            Text(
+              'Pontuação do ${jogador1.nome}: ${jogador1.obterPontuacao()}',
+              style: const TextStyle(fontSize: 18, color: Colors.white),
+            ),
             const SizedBox(height: 16),
-            const Text('Cartas do Jogador 1:'),
+            const Text(
+              'Cartas do Jogador 1:',
+              style: TextStyle(fontSize: 18, color: Colors.white),
+            ),
             SizedBox(
               height: cardHeight,
               child: ListView.builder(
@@ -77,12 +85,22 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
                   jogadorReceberCarta(jogador1);
                 });
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                textStyle: const TextStyle(fontSize: 16),
+              ),
               child: const Text('Jogador 1 - Receber Carta'),
             ),
             const SizedBox(height: 32),
-            Text('Pontuação do ${jogador2.nome}: ${jogador2.obterPontuacao()}'),
+            Text(
+              'Pontuação do ${jogador2.nome}: ${jogador2.obterPontuacao()}',
+              style: const TextStyle(fontSize: 18, color: Colors.white),
+            ),
             const SizedBox(height: 16),
-            const Text('Cartas do Jogador 2:'),
+            const Text(
+              'Cartas do Jogador 2:',
+              style: TextStyle(fontSize: 18, color: Colors.white),
+            ),
             SizedBox(
               height: cardHeight,
               child: ListView.builder(
@@ -101,6 +119,10 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
                   jogadorReceberCarta(jogador2);
                 });
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                textStyle: const TextStyle(fontSize: 16),
+              ),
               child: const Text('Jogador 2 - Receber Carta'),
             ),
             const SizedBox(height: 16),
@@ -110,6 +132,10 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
                   encerrarRodada();
                 });
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                textStyle: const TextStyle(fontSize: 16),
+              ),
               child: const Text('Encerrar Rodada'),
             ),
             const SizedBox(height: 20),
@@ -121,6 +147,10 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
                     mostrarResultadoDialog();
                   });
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  textStyle: const TextStyle(fontSize: 16),
+                ),
                 child: const Text('Jogador Vence (21 pontos)'),
               ),
             if (jogador1.obterPontuacao() < 21 ||
@@ -131,6 +161,10 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
                     pararDeReceberCartas();
                   });
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  textStyle: const TextStyle(fontSize: 16),
+                ),
                 child: const Text('Parar de Receber Cartas'),
               ),
           ],
@@ -282,23 +316,21 @@ class _JogoBlackjackState extends State<JogoBlackjack> {
     String resultado = 'Derrota';
 
     // Verificar se o jogador venceu
-    if (jogador.obterPontuacao() <= 21 &&
-        (jogador == jogador1 ||
-            (jogador == jogador2 && jogador1.obterPontuacao() > 21))) {
+    if ((jogador == jogador1 && jogador1.obterPontuacao() <= 21) &&
+        (jogador2.obterPontuacao() > 21 ||
+            jogador1.obterPontuacao() > jogador2.obterPontuacao())) {
       resultado = 'Vitória';
-    } else if (jogador.obterPontuacao() <= 21 &&
-        jogador1.obterPontuacao() > 21 &&
-        jogador == jogador2) {
+    } else if ((jogador == jogador2 && jogador2.obterPontuacao() <= 21) &&
+        (jogador1.obterPontuacao() > 21 ||
+            jogador2.obterPontuacao() > jogador1.obterPontuacao())) {
       resultado = 'Vitória';
-    } else if (jogador.obterPontuacao() <= 21 &&
-        jogador1.obterPontuacao() <= 21 &&
-        jogador2.obterPontuacao() <= 21 &&
-        jogador.obterPontuacao() > jogador1.obterPontuacao() &&
-        jogador.obterPontuacao() > jogador2.obterPontuacao()) {
-      resultado = 'Vitória';
-    } else if (jogador.obterPontuacao() == jogador1.obterPontuacao() &&
-        jogador.obterPontuacao() == jogador2.obterPontuacao()) {
-      resultado = 'Empate';
+    } else if (jogador1.obterPontuacao() <= 21 &&
+        jogador2.obterPontuacao() <= 21) {
+      if (jogador1.obterPontuacao() == jogador2.obterPontuacao()) {
+        resultado = 'Empate';
+      } else if (jogador1.obterPontuacao() > jogador2.obterPontuacao()) {
+        resultado = 'Vitória';
+      }
     }
 
     Historico.adicionarJogo(

@@ -9,6 +9,8 @@ class HistoricoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Histórico'),
+        backgroundColor:
+            Colors.green, // Ajuste a cor de fundo conforme necessário
         actions: [
           IconButton(
             onPressed: () {
@@ -43,6 +45,9 @@ class HistoricoScreen extends StatelessWidget {
                   return ListTile(
                     title: Text(
                       '${jogo.nomeJogador} - Pontuação: ${jogo.pontuacao} - ${jogo.resultado}',
+                      style: const TextStyle(
+                          color: Colors
+                              .black), // Ajuste a cor do texto conforme necessário
                     ),
                   );
                 },
@@ -59,7 +64,9 @@ class HistoricoScreen extends StatelessWidget {
             MaterialPageRoute(builder: (context) => const HomeScreen()),
           );
         },
-        child: const Icon(Icons.home),
+        backgroundColor: Colors.green,
+        child:
+            const Icon(Icons.home), // Ajuste a cor de fundo conforme necessário
       ),
     );
   }

@@ -11,127 +11,122 @@ class HomeScreen extends StatelessWidget {
     TextEditingController jogador2Controller = TextEditingController();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Blackjack'),
-      ),
       backgroundColor: const Color(0xFF2E7D32),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Image(image: AssetImage('lib/image/inicial.png')),
-            const Text(
-              'Informe os nomes dos jogadores:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            // Image.asset(),
-            const SizedBox(height: 16),
-            Form(
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: jogador1Controller,
-                    style: const TextStyle(color: Colors.black),
-                    decoration: InputDecoration(
-                      labelText: 'Nome Jogador 1',
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
+        // ignore: avoid_unnecessary_containers
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Image(image: AssetImage('lib/image/inicial.png')),
+              const SizedBox(height: 0.1),
+              Form(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: jogador1Controller,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                        labelText: 'Nome Jogador 1',
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                        ),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
                       ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: jogador2Controller,
-                    style: const TextStyle(color: Colors.black),
-                    decoration: InputDecoration(
-                      labelText: 'Nome Jogador 2',
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: jogador2Controller,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                        labelText: 'Nome Jogador 2',
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                        ),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
                       ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
                     ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              style: ButtonStyle(
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                  const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                ),
-                shape: MaterialStateProperty.all<OutlinedBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                textStyle: MaterialStateProperty.all<TextStyle>(
-                  const TextStyle(fontSize: 20),
+                  ],
                 ),
               ),
-              onPressed: () {
-                if (jogador1Controller.text.isNotEmpty &&
-                    jogador2Controller.text.isNotEmpty) {
+              const SizedBox(height: 20),
+              ElevatedButton(
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                  ),
+                  shape: MaterialStateProperty.all<OutlinedBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  textStyle: MaterialStateProperty.all<TextStyle>(
+                    const TextStyle(fontSize: 20),
+                  ),
+                ),
+                onPressed: () {
+                  if (jogador1Controller.text.isNotEmpty &&
+                      jogador2Controller.text.isNotEmpty) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => JogoBlackjack(
+                          jogador1Controller.text,
+                          jogador2Controller.text,
+                        ),
+                      ),
+                    );
+                  } else {
+                    _showAlertDialog(context);
+                  }
+                },
+                child: const Text('Jogar'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                  ),
+                  shape: MaterialStateProperty.all<OutlinedBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  textStyle: MaterialStateProperty.all<TextStyle>(
+                    const TextStyle(fontSize: 20),
+                  ),
+                ),
+                onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => JogoBlackjack(
-                        jogador1Controller.text,
-                        jogador2Controller.text,
-                      ),
+                      builder: (context) =>
+                          const HistoricoScreen(), // Navegar para a tela de histórico
                     ),
                   );
-                } else {
-                  _showAlertDialog(context);
-                }
-              },
-              child: const Text('Jogar'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              style: ButtonStyle(
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                  const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                ),
-                shape: MaterialStateProperty.all<OutlinedBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                textStyle: MaterialStateProperty.all<TextStyle>(
-                  const TextStyle(fontSize: 20),
-                ),
+                },
+                child: const Text('Histórico'),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        const HistoricoScreen(), // Navegar para a tela de histórico
-                  ),
-                );
-              },
-              child: const Text('Histórico'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
